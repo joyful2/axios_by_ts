@@ -30,7 +30,7 @@ export default class Axios {
   }
 
   request(url: any, config?: any): AxiosPromise {
-    // 这里不等于没有约束参数类型吗？ 有无更好的重载方式？
+    //todo: 这里不等于没有约束参数类型吗？ 有无更好的重载方式？
     if (typeof url === 'string') {
       if (!config) {
         config = {}
@@ -48,6 +48,7 @@ export default class Axios {
     ]
 
     this.interceptors.request.forEach(interceptor => {
+      //遍历请求拦截器，有就添加到chain
       chain.unshift(interceptor)
     })
 
@@ -58,7 +59,7 @@ export default class Axios {
     let promise = Promise.resolve(config)
 
     while (chain.length) {
-      const { resolved, rejected } = chain.shift()!
+      const { resolved, rejected } = chain.shift()! //todo: 为什么这里不是rejected!
       promise = promise.then(resolved, rejected)
     }
 
